@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        h3 {
+            color: rgb(153, 44, 62);
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text">
+    <input type="button" value="音乐搜索">
+    <h3></h3>
+    <script>
+        document.querySelector('input[type=button]').onclick = function() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://musicapi.leanapp.cn/search?keywords=' + document.querySelector('input[type=text]').value, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = xhr.responseText;
+                    console.log(data);
+                    data = JSON.parse(data);
+                    str = "";
+                    for (let i = 0; i < 20; i++) {
+                        str += "<br>";
+                        str += i + 1 + "." + "歌曲名称:" + data.result.songs[i].name + "<br>";
+                        str += "标签:" + data.result.songs[i].album.name + "<br>";
+                        str += "作者:" + data.result.songs[i].artists[0].name + "<br>";
+                    }
+                    document.querySelector("h3").innerHTML = str;
+
+                }
+            }
+            xhr.send(null);
+
+        }
+    </script>
+</body>
+
+</html>
